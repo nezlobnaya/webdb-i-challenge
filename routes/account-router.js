@@ -16,23 +16,18 @@ router.get('/', (req, res) => {
 })
 
 router.get('/:id', (req, res) => {
-    db('accounts').where('id', req.params.id)
-    .then(accounts => {
-        const account = accounts[0]
-        if (account) {
-            res.json(account)
-        } else {
-            res.status(404).json({
-                message: 'invalid account id'
-            })
-        }
-    }) .catch (error => {
+    db('accounts').where('id', req.params.id).first()
+    .then(account => {
+       res.json(account)
+        }) .catch (error => {
         console.log(error)
         res.status(500).json({
             message: 'unable to retrieve an account'
         })
     })
 })
+
+
 
 router.post('/', (req, res) => {
     const accountData = req.body
@@ -46,6 +41,8 @@ router.post('/', (req, res) => {
          });
         });
     })
+
+
 
 router.put('/:id', (req, res) => {
     const changedAccount = req.body
